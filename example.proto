@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+service MyService {
+  rpc SendMessage (Request) returns (Response);
+}
+
+message Request {
+  string client_id = 1;
+  string message_content = 2;
+}
+
+message Response {
+  string reply_content = 1;
+}
