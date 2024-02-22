@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+service MyService {
+  rpc StreamMessages (stream Request) returns (stream Response);
+}
+
+message Request {
+  string client_id = 1;
+  string message_content = 2;
+}
+
+message Response {
+  string client_id = 1;
+  string reply_content = 2;
+}
