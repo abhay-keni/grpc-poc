@@ -8,19 +8,23 @@ def client(client_id):
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://127.0.0.1:5555")
 
-    message = f"Client {client_id}"
-    print(f"Sending request: {message}")
-    with open("file.txt", "a") as file:
-        file.write(str(f"Sending request: {message} \n\n"))
+    while True:
+        message = f"Client {client_id}"
+        print(f"Sending request: {message}")
+        with open("file.txt", "a") as file:
+            file.write(str(f"Sending request: {message} \n\n"))
 
-    # Send a request to the server
-    socket.send_string(message)
+        # Send a request to the server
+        socket.send_string(message)
 
-    # Receive the response from the server
-    response = socket.recv_string()
-    print(f"Received response: {response}")
-    with open("file.txt", "a") as file:
-        file.write(str(f"Received response: {response} \n\n"))
+        # Receive the response from the server
+        response = socket.recv_string()
+        if response == "Finish":
+            break
+
+        print(f"Received response: {response}")
+        with open("file.txt", "a") as file:
+            file.write(str(f"Received response: {response} \n\n"))
 
 
 if __name__ == "__main__":
@@ -28,7 +32,7 @@ if __name__ == "__main__":
 
     ray.init()
 
-    num_clients = 1000
+    num_clients = 1
     res = []
     for i in range(num_clients):
         res.append(client.remote(i))
